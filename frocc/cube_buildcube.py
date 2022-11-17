@@ -13,7 +13,7 @@
 
  Developed at: IDIA (Institure for Data Intensive Astronomy), Cape Town, ZA
  Inspired by: https://github.com/idia-astro/image-generator
- 
+
  Lennart Heino
 
 ------------------------------------------------------------------------------
@@ -34,6 +34,9 @@ import seaborn as sns
 import casatasks
 from radio_beam import Beam, Beams
 from astropy import units
+from astropy.table import Table, vstack
+import astropy.units as units
+from astropy.wcs import WCS
 
 import matplotlib as mpl
 mpl.use('Agg') # Backend that doesn't need X server
@@ -70,7 +73,7 @@ def smoother(fitsnames, conf):
 
     Returns:
         list: List of smoothed fits files
-    """    
+    """
     if conf.input.smoothbeam == "auto":
         beam_list = []
         for fitsname in fitsnames:
@@ -95,7 +98,7 @@ def smoother(fitsnames, conf):
         major = conf.input.smoothbeam
         minor = conf.input.smoothbeam
         pa = "0deg"
-    
+
     outSmoothedFitsNames = []
     for fitsname in fitsnames:
         outImageName = fitsname.replace(".fits", "")
@@ -104,7 +107,7 @@ def smoother(fitsnames, conf):
 
         info(f"Importing: {fitsname}")
         casatasks.importfits(
-            fitsimage=fitsname, 
+            fitsimage=fitsname,
             imagename=outImageName,
             overwrite=True,
         )
@@ -121,8 +124,8 @@ def smoother(fitsnames, conf):
         )
         info(f"Exporting: {outSmoothedFits}")
         casatasks.exportfits(
-            imagename=outSmoothedName, 
-            fitsimage=outSmoothedFits, 
+            imagename=outSmoothedName,
+            fitsimage=outSmoothedFits,
             overwrite=True
         )
         outSmoothedFitsNames.append(outSmoothedFits)
@@ -222,7 +225,7 @@ def make_empty_image(conf, mode="normal"):
         channelFitsfileList = smoother(oldChannelFitsfileList, conf)
     else:
         channelFitsfileList = sorted(glob(conf.env.dirImages + "*.chan*image.fits"))
-        
+
     lowestChannelFitsfile = channelFitsfileList[0]
     highestChannelFitsfile = channelFitsfileList[-1]
     info(SEPERATOR)
@@ -406,6 +409,78 @@ def get_cropped_numpy_plane(conf, plane):
         print(plane.shape)
     return plane
 
+
+def add_beamtable(fitsnames, cubeName):
+    beam_list = []
+    for fitsname in fitsnames:
+        header = fits.getheader(fitsname)
+        beam = Beam.from_fits_header(header)
+        beam_list.append(beam)
+
+    beams = Beams(
+        major=np.array([b.major.to(units.deg).value for b in beam_list])
+        * units.deg,
+        minor=np.array([b.minor.to(units.deg).value for b in beam_list])
+        * units.deg,
+        pa=np.array([b.pa.to(units.deg).value for b in beam_list]) * units.deg,
+    )
+    with fits.open(cubeName, memmap=True, mode="denywrite") as hdulist:
+        primary_hdu = hdulist[0]
+        data = primary_hdu.data
+        header = primary_hdu.header
+        wcs = WCS(header)
+        axis_type_dict = wcs.get_axis_types()[::-1] # Reverse order for fits
+        axis_names = [i["coordinate_type"] for i in axis_type_dict]
+        spec_idx = axis_names.index("spectral")
+        stokes_idx = axis_names.index("stokes")
+
+    # Find the number of Stokes
+    n_stokes = data.shape[stokes_idx]
+    # Find the number of spectral channels
+    n_chan = data.shape[spec_idx]
+    assert n_chan == len(
+        beams
+    ), "Number of channels in header and commonbeams do not match"
+    chans = np.arange(n_chan)
+
+
+    header["CASAMBM"] = True
+    header["COMMENT"] = "The PSF in each image plane varies."
+    header[
+        "COMMENT"
+    ] = "Full beam information is stored in the second FITS extension."
+    tiny = np.finfo(np.float32).tiny
+    pols = np.ones_like(chans)   # Zeros because we take the first one
+    beam_tables = []
+    # Report beams for all Stokes
+    # Assming they are the same here
+    for s in range(n_stokes):
+        pols = np.ones_like(chans) * s
+        _beam_table = Table(
+            data=[
+                # Replace NaNs with np.finfo(np.float32).tiny - this is the smallest
+                # positive number that can be represented in float32
+                # We use this to keep CASA happy
+                np.nan_to_num(beams.major.to(units.arcsec), nan=tiny * units.arcsec),
+                np.nan_to_num(beams.minor.to(units.arcsec), nan=tiny * units.arcsec),
+                np.nan_to_num(beams.pa.to(units.deg), nan=tiny * units.deg),
+                chans,
+                pols,
+            ],
+            names=["BMAJ", "BMIN", "BPA", "CHAN", "POL"],
+            dtype=["f4", "f4", "f4", "i4", "i4"],
+        )
+        beam_tables.append(_beam_table)
+    beam_table = vstack(beam_tables)
+    header["COMMENT"] = f"The value '{tiny}' repsenents a NaN PSF in the beamtable."
+    primary_hdu = fits.PrimaryHDU(data=data, header=header)
+    tab_hdu = fits.table_to_hdu(beam_table)
+    tab_header = tab_hdu.header
+    tab_header["EXTNAME"] = "BEAMS"
+    tab_header["NCHAN"] = n_chan
+    tab_header["NPOL"] = n_stokes
+    new_hdulist = fits.HDUList([primary_hdu, tab_hdu])
+    new_hdulist.writeto(cubeName, overwrite=True)
 
 def fill_cube_with_images(channelFitsfileList, conf, mode="normal"):
     """
