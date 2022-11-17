@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-from frocc.lhelpers import DotMap, get_dict_from_click_args
-from frocc.config import SPECIAL_FLAGS, FILEPATH_CONFIG_TEMPLATE_ORIGINAL
-import sys
-import re
 import os
+import re
+import sys
+
+from frocc.config import FILEPATH_CONFIG_TEMPLATE_ORIGINAL, SPECIAL_FLAGS
+from frocc.lhelpers import DotMap, get_dict_from_click_args
+
 '''
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------

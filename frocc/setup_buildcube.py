@@ -1,31 +1,36 @@
 #/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import sys
-import logging
+import configparser
 import datetime
 import itertools
+import logging
 import os
-import time
-import shutil
 import re
+import shutil
 import subprocess
-import configparser
-from frocc.logger import *
+import sys
+import time
 
-# own helpers
-from frocc.lhelpers import get_dict_from_click_args, DotMap, get_config_in_dot_notation, main_timer, write_sbtach_file, get_firstFreq, get_basename_from_path, get_optimal_taskNo_cpu_mem, SEPERATOR, run_command_with_logging
-from frocc.config import SPECIAL_FLAGS, FILEPATH_CONFIG_USER, PATH_PACKAGE, FILEPATH_CONFIG_TEMPLATE, FILEPATH_CONFIG_TEMPLATE_ORIGINAL, FILEPATH_LOG_PIPELINE, FILEPATH_LOG_TIMER
 import frocc
+from frocc.config import (FILEPATH_CONFIG_TEMPLATE,
+                          FILEPATH_CONFIG_TEMPLATE_ORIGINAL,
+                          FILEPATH_CONFIG_USER, FILEPATH_LOG_PIPELINE,
+                          FILEPATH_LOG_TIMER, PATH_PACKAGE, SPECIAL_FLAGS)
+# own helpers
+from frocc.lhelpers import (SEPERATOR, DotMap, get_basename_from_path,
+                            get_config_in_dot_notation,
+                            get_dict_from_click_args, get_firstFreq,
+                            get_optimal_taskNo_cpu_mem, main_timer,
+                            run_command_with_logging, write_sbtach_file)
+from frocc.logger import *
 
 os.environ['LC_ALL'] = "C.UTF-8"
 os.environ['LANG'] = "C.UTF-8"
 
 # need to be instaled in container. Right now linkt with $PYTHONPATH
 import click
-
 # non defaults
 import numpy as np
-
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # SETTINGS
@@ -51,7 +56,8 @@ def get_all_freqsList_tmp(conf, msIdx):
     Problem: Gets all frequencies in frequency range, not only the valid ones!
     Get all the frequencies of all the channels in each spw.
     """
-    from casatools import table  # work around sice this script get executed in different environments/containers
+    from casatools import \
+        table  # work around sice this script get executed in different environments/containers
     allFreqsList = np.array([])
     info(f"Opening file to read the frequency coverage of all channels in each spw: {conf.input.inputMS[msIdx]}")
     #mstb = tb.open(conf.input.inputMS[msIdx] + "::SPECTRAL_WINDOW")
@@ -67,7 +73,8 @@ def get_all_freqsList(conf, msIdx):
     """
     Get all the frequencies of all the channels in each spw.
     """
-    from casatools import msmetadata  # work around sice this script get executed in different environments/containers
+    from casatools import \
+        msmetadata  # work around sice this script get executed in different environments/containers
     allFreqsList = np.array([])
     info(f"Opening file to read the frequency coverage of all channels in each spw: {conf.input.inputMS[msIdx]}")
     msmd = msmetadata()
@@ -83,8 +90,9 @@ def get_fields(conf, msIdx):
     Get all the frequencies of all the channels in each spw.
     TODO: put all the msmd in one fuction so that the object is created only once.
     """
-    from casatools import table  # work around sice this script get executed in different environments/containers
     import casatools
+    from casatools import \
+        table  # work around sice this script get executed in different environments/containers
     print("DEBUG", casatools.__path__)
     info(f"Opening file to read the fields: {conf.input.inputMS[msIdx]}")
     tb = table()

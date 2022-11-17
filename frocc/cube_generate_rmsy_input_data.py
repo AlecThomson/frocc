@@ -1,25 +1,26 @@
 #!python3
 # -*- coding: utf-8 -*-
 
-import numpy as np
-import logging
 import csv
-from numpy.polynomial.polynomial import polyfit
-import seaborn as sns
-from matplotlib import pyplot as plt
-import matplotlib as mpl
-from scipy.stats import linregress
-from scipy import optimize
-from astropy.io import fits
-from glob import glob
+import logging
 import os
-
-from scipy import *
-from frocc.lhelpers import get_std_via_mad, get_config_in_dot_notation, main_timer, get_firstFreq
-from frocc.config import FILEPATH_CONFIG_TEMPLATE, FILEPATH_CONFIG_USER
-from logging import info, error
 import subprocess
+from glob import glob
+from logging import error, info
 
+import matplotlib as mpl
+import numpy as np
+import seaborn as sns
+from astropy.io import fits
+from matplotlib import pyplot as plt
+from numpy.polynomial.polynomial import polyfit
+from scipy import *
+from scipy import optimize
+from scipy.stats import linregress
+
+from frocc.config import FILEPATH_CONFIG_TEMPLATE, FILEPATH_CONFIG_USER
+from frocc.lhelpers import (get_config_in_dot_notation, get_firstFreq,
+                            get_std_via_mad, main_timer)
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # SETTINGS

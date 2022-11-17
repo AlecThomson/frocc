@@ -1,7 +1,9 @@
 #!/users/lennart/venv/bin/python3
-import numpy as np 
-import pandas as pd
 from io import StringIO
+
+import numpy as np
+import pandas as pd
+
 
 # below is 
 # Do you see this? <--------------

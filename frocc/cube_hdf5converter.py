@@ -12,9 +12,14 @@
  created.
 '''
 
-from frocc.lhelpers import get_std_via_mad, get_config_in_dot_notation, main_timer, update_CRPIX3, SEPERATOR, run_command_with_logging, get_dict_from_tabFile, format_legend
+from logging import error, info
+
 from frocc.config import FILEPATH_CONFIG_TEMPLATE, FILEPATH_CONFIG_USER
-from logging import info, error
+from frocc.lhelpers import (SEPERATOR, format_legend,
+                            get_config_in_dot_notation, get_dict_from_tabFile,
+                            get_std_via_mad, main_timer,
+                            run_command_with_logging, update_CRPIX3)
+
 
 def message():
     info("This is an indicator message. It helps to track execution times for those scripts that can not utilize the python logger itself. One of these scripts is the HDF5 converter, which gets executed in an sbatch file directly. This also means that the corrosponding log messages appear somewhere else, probably in the *.out file")

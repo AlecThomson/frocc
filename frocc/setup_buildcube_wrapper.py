@@ -16,20 +16,27 @@
 '''
 import os
 import time
+
 # must come before `import click`
 os.environ['LC_ALL'] = "C-UTF-8"
 os.environ['LANG'] = "C-UTF-8"
 
-import click
 import subprocess
 from os.path import expanduser
-from frocc.lhelpers import main_timer, get_config_in_dot_notation, print_starting_banner
-from frocc.check_input import check_all, print_usage, print_help, print_help_verbose, print_readme
-from frocc.check_status import print_status
-from frocc.config import SPECIAL_FLAGS, FILEPATH_CONFIG_TEMPLATE_ORIGINAL, FILEPATH_LOG_PIPELINE, FILEPATH_CONFIG_USER, FILEPATH_CONFIG_TEMPLATE
-from frocc.logger import *
-from frocc.setup_buildcube import write_all_sbatch_files, copy_runscripts
 
+import click
+
+from frocc.check_input import (check_all, print_help, print_help_verbose,
+                               print_readme, print_usage)
+from frocc.check_status import print_status
+from frocc.config import (FILEPATH_CONFIG_TEMPLATE,
+                          FILEPATH_CONFIG_TEMPLATE_ORIGINAL,
+                          FILEPATH_CONFIG_USER, FILEPATH_LOG_PIPELINE,
+                          SPECIAL_FLAGS)
+from frocc.lhelpers import (get_config_in_dot_notation, main_timer,
+                            print_starting_banner)
+from frocc.logger import *
+from frocc.setup_buildcube import copy_runscripts, write_all_sbatch_files
 
 # TODO: put this in default_config.* at a later stage
 #PREFIX_SINGULARITY = "srun --qos qos-interactive --nodes=1 --ntasks=1 --time=10 --mem=20GB --partition=Main singularity exec /idia/software/containers/casa-6.simg python3 $HOME/.local/bin/setup_buildcube "

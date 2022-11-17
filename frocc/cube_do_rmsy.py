@@ -1,17 +1,16 @@
 #!python3
 
-import logging
 import csv
-import numpy as np
 import json
-
+import logging
 from glob import glob
-from frocc.lhelpers import get_config_in_dot_notation, main_timer
-from frocc.config import FILEPATH_CONFIG_TEMPLATE, FILEPATH_CONFIG_USER
-from logging import info, error
+from logging import error, info
 
+import numpy as np
 from RMtools_1D.do_RMsynth_1D import run_rmsynth
 
+from frocc.config import FILEPATH_CONFIG_TEMPLATE, FILEPATH_CONFIG_USER
+from frocc.lhelpers import get_config_in_dot_notation, main_timer
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # SETTINGS

@@ -1,12 +1,14 @@
 #!/usr/bin/python3
-import subprocess
-import sys
 import os
 import re
+import subprocess
+import sys
 
-from frocc.lhelpers import get_config_in_dot_notation, get_basename_from_path, get_statusList, SEPERATOR, SEPERATOR_HEAVY
 from frocc.config import FILEPATH_CONFIG_TEMPLATE, FILEPATH_CONFIG_USER
+from frocc.lhelpers import (SEPERATOR, SEPERATOR_HEAVY, get_basename_from_path,
+                            get_config_in_dot_notation, get_statusList)
 from frocc.logger import *
+
 
 def print_header():
     headline = " [ Checking output files ... ] "

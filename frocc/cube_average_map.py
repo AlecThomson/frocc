@@ -19,27 +19,32 @@
 ------------------------------------------------------------------------------
 """
 
+import csv
+import datetime
 import itertools
 #import logging
 #from logging import info, error
 import os
-import csv
-import datetime
-from glob import glob
 import re
 import shutil
 import sys
-import click
+from glob import glob
 
+import click
 import numpy as np
 from astropy.io import fits
 
-from frocc.lhelpers import get_channelNumber_from_filename, get_config_in_dot_notation, get_std_via_mad, main_timer, change_channelNumber_from_filename,  SEPERATOR, get_lowest_channelNo_with_data_in_cube, update_fits_header_of_cube, DotMap, get_dict_from_click_args, calculate_channelFreq_from_header
 from frocc.config import FILEPATH_CONFIG_TEMPLATE, FILEPATH_CONFIG_USER
+from frocc.lhelpers import (SEPERATOR, DotMap,
+                            calculate_channelFreq_from_header,
+                            change_channelNumber_from_filename,
+                            get_channelNumber_from_filename,
+                            get_config_in_dot_notation,
+                            get_dict_from_click_args,
+                            get_lowest_channelNo_with_data_in_cube,
+                            get_std_via_mad, main_timer,
+                            update_fits_header_of_cube)
 from frocc.logger import *
-
-
-
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # SETTINGS

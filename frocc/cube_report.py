@@ -14,31 +14,45 @@
 ------------------------------------------------------------------------------
 """
 
-import requests
-import random, string
-import os
-import re
-import sys
-import shutil
-import subprocess
-import numpy as np
 import getpass
+import os
+import random
+import re
+import shutil
+import string
+import subprocess
+import sys
 from datetime import datetime
-from io import StringIO
-from jinja2 import Template
 from glob import glob
+from io import StringIO
+
 #import seaborn as sns
 import matplotlib as mpl
+import numpy as np
+import requests
+from jinja2 import Template
+
 mpl.use('Agg')
+import aplpy
 import matplotlib.pyplot as plt
 #import seaborn as sns
 from astropy.io import fits
-import aplpy
 from casatasks import listobs
 
-from frocc.lhelpers import get_channelNumber_from_filename, get_config_in_dot_notation, get_std_via_mad, main_timer, change_channelNumber_from_filename,  SEPERATOR, get_lowest_channelNo_with_data_in_cube, update_fits_header_of_cube, DotMap, get_dict_from_click_args, calculate_channelFreq_from_header, read_file_as_string, write_file_from_string, get_timestamp, run_command_with_logging, get_dict_from_tabFile, get_lowest_channelIdx_and_freq_with_data_in_cube
 from frocc.check_output import print_output
-from frocc.config import FORMAT_LOGS_TIMESTAMP, FILEPATH_JINJA_TEMPLATE, FILEPATH_CONFIG_TEMPLATE, FILEPATH_CONFIG_USER
+from frocc.config import (FILEPATH_CONFIG_TEMPLATE, FILEPATH_CONFIG_USER,
+                          FILEPATH_JINJA_TEMPLATE, FORMAT_LOGS_TIMESTAMP)
+from frocc.lhelpers import (SEPERATOR, DotMap,
+                            calculate_channelFreq_from_header,
+                            change_channelNumber_from_filename,
+                            get_channelNumber_from_filename,
+                            get_config_in_dot_notation,
+                            get_dict_from_click_args, get_dict_from_tabFile,
+                            get_lowest_channelIdx_and_freq_with_data_in_cube,
+                            get_lowest_channelNo_with_data_in_cube,
+                            get_std_via_mad, get_timestamp, main_timer,
+                            read_file_as_string, run_command_with_logging,
+                            update_fits_header_of_cube, write_file_from_string)
 from frocc.logger import *
 
 #sns.set_style("ticks")

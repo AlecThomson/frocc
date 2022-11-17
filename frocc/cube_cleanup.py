@@ -12,21 +12,22 @@ Lennart Heino
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-import numpy as np
-import sys
-import logging
-import datetime
 import argparse
+import datetime
+import logging
 import os
 import shutil
-from logging import info, error
+import sys
+from logging import error, info
 
+import casatasks
 import click
-
-import casatasks 
+import numpy as np
 
 from frocc.config import FILEPATH_CONFIG_TEMPLATE, FILEPATH_CONFIG_USER
-from frocc.lhelpers import get_dict_from_click_args, DotMap, get_config_in_dot_notation, get_firstFreq, get_basename_from_path, SEPERATOR, SEPERATOR_HEAVY
+from frocc.lhelpers import (SEPERATOR, SEPERATOR_HEAVY, DotMap,
+                            get_basename_from_path, get_config_in_dot_notation,
+                            get_dict_from_click_args, get_firstFreq)
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # SETTINGS
@@ -45,6 +46,8 @@ logging.basicConfig(
 #Otherwise casa log files get confused
 import functools
 import inspect
+
+
 def main_timer(func):
     '''
     '''

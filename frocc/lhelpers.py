@@ -3,23 +3,26 @@
 Convinience functions and classes.
 '''
 
+import ast
 import configparser
 import datetime
-import os
-import ast
 import functools
-import numpy as np
-from numpy import nan
 import inspect
+import os
 import subprocess
 import sys
+
+import numpy as np
 from astropy.io import fits
-#from frocc.logger import info, debug, error, warning
+from numpy import nan
 
 #import logging
 #from logging import info, debug, error, warning
 from frocc.config import FILEPATH_CONFIG_TEMPLATE, FILEPATH_CONFIG_USER
 from frocc.logger import *
+
+#from frocc.logger import info, debug, error, warning
+
 
 #logging.basicConfig(
 #    format="%(asctime)s\t[ %(levelname)s ]\t%(message)s", level=logging.INFO

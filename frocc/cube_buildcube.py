@@ -19,37 +19,41 @@
 ------------------------------------------------------------------------------
 """
 
-import itertools
-import logging
-from logging import info, error
-import os
 import csv
 import datetime
-from glob import glob
+import itertools
+import logging
+import os
 import re
 import sys
+from glob import glob
+from logging import error, info
+
+import astropy.units as units
+import casatasks
 import click
+import matplotlib as mpl
 import pandas as pd
 import seaborn as sns
-import casatasks
-from radio_beam import Beam, Beams
 from astropy import units
 from astropy.table import Table, vstack
-import astropy.units as units
 from astropy.wcs import WCS
+from radio_beam import Beam, Beams
 
-import matplotlib as mpl
 mpl.use('Agg') # Backend that doesn't need X server
-from matplotlib import pyplot as plt
-
 import numpy as np
 from astropy.io import fits
+from matplotlib import pyplot as plt
 
-from frocc.lhelpers import get_channelNumber_from_filename, get_config_in_dot_notation, get_std_via_mad, main_timer, change_channelNumber_from_filename,  SEPERATOR, get_lowest_channelNo_with_data_in_cube, update_fits_header_of_cube, DotMap, get_dict_from_click_args
 from frocc.config import FILEPATH_CONFIG_TEMPLATE, FILEPATH_CONFIG_USER
-
-
-
+from frocc.lhelpers import (SEPERATOR, DotMap,
+                            change_channelNumber_from_filename,
+                            get_channelNumber_from_filename,
+                            get_config_in_dot_notation,
+                            get_dict_from_click_args,
+                            get_lowest_channelNo_with_data_in_cube,
+                            get_std_via_mad, main_timer,
+                            update_fits_header_of_cube)
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # SETTINGS

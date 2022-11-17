@@ -1,26 +1,32 @@
 #!python3
 # -*- coding: utf-8 -*-
 
-import numpy as np
-import logging
 import csv
+import logging
 import shutil
-from numpy.polynomial.polynomial import polyfit
-import seaborn as sns
-import matplotlib as mpl
-mpl.use('Agg') # Backend that doesn't need X server
-from matplotlib import pyplot as plt
-from scipy.stats import linregress
-from scipy import optimize
-from astropy.io import fits
-from glob import glob
-import os
 
-from scipy import *
-from frocc.lhelpers import get_std_via_mad, get_config_in_dot_notation, main_timer, update_CRPIX3, SEPERATOR, run_command_with_logging, get_dict_from_tabFile, format_legend
-from frocc.config import FILEPATH_CONFIG_TEMPLATE, FILEPATH_CONFIG_USER
-from logging import info, error
+import matplotlib as mpl
+import numpy as np
+import seaborn as sns
+from numpy.polynomial.polynomial import polyfit
+
+mpl.use('Agg') # Backend that doesn't need X server
+import os
 import subprocess
+from glob import glob
+from logging import error, info
+
+from astropy.io import fits
+from matplotlib import pyplot as plt
+from scipy import *
+from scipy import optimize
+from scipy.stats import linregress
+
+from frocc.config import FILEPATH_CONFIG_TEMPLATE, FILEPATH_CONFIG_USER
+from frocc.lhelpers import (SEPERATOR, format_legend,
+                            get_config_in_dot_notation, get_dict_from_tabFile,
+                            get_std_via_mad, main_timer,
+                            run_command_with_logging, update_CRPIX3)
 
 PRE_IOR_LIMIT_SIGMA = 10 # n sigma over median
 IOR_LIMIT_SIGMA = 8 # n sigma over median
