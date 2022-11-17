@@ -29,7 +29,6 @@ import sys
 from glob import glob
 from logging import error, info
 
-import astropy.units as units
 import casatasks
 import click
 import matplotlib as mpl
