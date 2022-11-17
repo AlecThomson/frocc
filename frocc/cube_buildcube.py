@@ -620,6 +620,11 @@ def fill_cube_with_images(channelFitsfileList, conf, mode="normal"):
             "COMMENT": "Created by IDIA Pipeline"
             }
     update_fits_header_of_cube(cubeName, addFitsHeaderDict)
+    # Add beamtable to extension
+    add_beamtable(
+        fitsnames=channelFitsfileList,
+        cubeName=cubeName,
+    )
     write_statistics_file(rmsDict, conf, mode=mode)
     if conf.input.fileXYphasePolAngleCoeffs:
         plot_xyPhaseCorr_and_polAngleCorr(rmsDict, conf)
